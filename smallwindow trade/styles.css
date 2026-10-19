@@ -487,3 +487,13 @@ body.overlay .card small {
   background: var(--input);
   text-decoration: underline;
 }
+
+/* Keep support visible at the bottom of Chrome's height-limited popup. */
+body:not(.overlay) footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: var(--bg);
+  padding-bottom: 10px;
+  box-shadow: 0 -8px 12px var(--bg);
+}

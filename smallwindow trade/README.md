@@ -83,8 +83,12 @@ To regenerate the installable ZIP from the current source, run `python3 scripts/
 
 ## Sponsor
 
-Want to support continued development? Use **Sponsor this extension** in the popup or floating window to open https://umair.sbs/pay/ in a new tab. Sponsorship is optional and all extension features remain available.
+Want to support continued development? Use **Sponsor me** in the popup or floating window to open https://umair.sbs/pay/ in a new tab. Sponsorship is optional and all extension features remain available.
 
 ### 1.0.2
 
 - Added an optional sponsorship link in the popup and floating-window footer.
+
+### 1.0.3
+
+- Renamed the footer link to **Sponsor me** and kept the popup footer visible at the bottom while scrolling. Clicking it opens the payment page; visitors choose whether to contribute there.
