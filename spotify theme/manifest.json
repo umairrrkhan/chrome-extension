@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Aura — Spotify Themes",
+  "version": "1.0.0",
+  "description": "Make Spotify feel like you. Anime-inspired scenes, aesthetic colors, focus mode, and a sleep timer. All local, all yours.",
+  "permissions": ["storage", "alarms"],
+  "host_permissions": ["https://open.spotify.com/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Aura · Your Spotify, your atmosphere",
+    "default_icon": {"16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png"}
+  },
+  "icons": {"16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png"},
+  "background": {"service_worker": "background.js"},
+  "content_scripts": [{
+    "matches": ["https://open.spotify.com/*"],
+    "js": ["core.js", "content.js"],
+    "css": ["content.css"],
+    "run_at": "document_start"
+  }],
+  "web_accessible_resources": [{"resources": ["assets/*.svg"], "matches": ["https://open.spotify.com/*"]}],
+  "content_security_policy": {"extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'"}
+}
