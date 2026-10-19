@@ -2,8 +2,8 @@
 (function (root) {
   'use strict';
   const themes = [
-    {id:'violet-muse', name:'Violet muse', category:'anime', tags:['waifu'], label:'ANIME GIRL · LO-FI', accent:'#d4b3f4', bg:'#1a1426', panel:'#2c213d', text:'#f8f0ff', art:'violet-muse', format:'webp', description:'Her favorite song. Your quiet little world.'},
-    {id:'moonlight-waifu', name:'Moonlight waifu', category:'anime', tags:['waifu'], label:'WAIFU · MOONLIT CALM', accent:'#a5e2e9', bg:'#101b2c', panel:'#1d3046', text:'#edf9ff', art:'moonlight-waifu', format:'webp', description:'Silver hair, ocean air, one more song.'},
+    {id:'violet-muse', name:'Violet muse', category:'anime', tags:['waifu'], label:'ANIME GIRL · LO-FI', accent:'#d4b3f4', bg:'#1a1426', panel:'#2c213d', text:'#f8f0ff', art:'violet-muse', format:'webp', backdrop:'assets/midnight.svg', companion:'assets/violet-companion.webp', description:'A quiet city and your headphone companion.'},
+    {id:'moonlight-waifu', name:'Moonlight waifu', category:'anime', tags:['waifu'], label:'WAIFU · MOONLIT CALM', accent:'#a5e2e9', bg:'#101b2c', panel:'#1d3046', text:'#edf9ff', art:'moonlight-waifu', format:'webp', backdrop:'assets/stargazer.svg', companion:'assets/moon-companion.webp', description:'A little company under a moonlit sky.'},
     {id:'sakura', name:'Sakura dreams', category:'anime', label:'SOFT & SERENE', accent:'#e8a1c5', bg:'#201722', panel:'#2a202f', text:'#f8eef7', art:'sakura', description:'A quiet evening under pink skies.'},
     {id:'midnight', name:'Midnight in Tokyo', category:'anime', label:'AFTER HOURS', accent:'#b7a0fa', bg:'#141321', panel:'#211e32', text:'#f5f0ff', art:'midnight', description:'City lights. Headphones on. World off.'},
     {id:'forest', name:'Forest daydream', category:'aesthetic', label:'SLOW LIVING', accent:'#b3d79b', bg:'#15221e', panel:'#21332a', text:'#eff8ec', art:'forest', description:'A little room to breathe.'},
@@ -23,11 +23,11 @@
     {id:'mono', name:'Terminal', note:'A retro digital feeling', family:'ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace', sample:'Aa'},
     {id:'bookish', name:'Bookish', note:'Warm & unhurried', family:'"Palatino Linotype", "Book Antiqua", Palatino, "DejaVu Serif", serif', sample:'Aa'}
   ];
-  const defaults = Object.freeze({enabled:true, theme:'midnight', accent:'', dim:45, compact:false, focus:false, reduceMotion:false, background:'', font:'default'});
+  const defaults = Object.freeze({enabled:true, theme:'midnight', accent:'', dim:45, compact:false, focus:false, reduceMotion:false, background:'', font:'default', companion:true});
   function normalize(value = {}) {
     const v = value && typeof value === 'object' ? value : {};
     const result = {...defaults};
-    for (const key of ['enabled','compact','focus','reduceMotion']) if (typeof v[key] === 'boolean') result[key] = v[key];
+    for (const key of ['enabled','compact','focus','reduceMotion','companion']) if (typeof v[key] === 'boolean') result[key] = v[key];
     if (themes.some(t => t.id === v.theme)) result.theme = v.theme;
     if (fonts.some(f => f.id === v.font)) result.font = v.font;
     if (typeof v.accent === 'string' && /^#[\da-f]{6}$/i.test(v.accent)) result.accent = v.accent;

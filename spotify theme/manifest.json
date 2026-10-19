@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Aura — Spotify Themes",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Your Spotify, your atmosphere. Anime girl and waifu wallpapers, aesthetic themes, font styles, focus mode, and a sleep timer.",
   "permissions": ["storage", "alarms"],
   "host_permissions": ["https://open.spotify.com/*"],

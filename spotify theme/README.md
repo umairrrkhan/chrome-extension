@@ -17,6 +17,7 @@ No `npm install` or build command is needed. The extension works in Chrome and C
 ## Inside Aura
 
 - **Twelve bundled themes:** Violet muse (anime girl), Moonlight waifu, Sakura dreams, Midnight in Tokyo, Forest daydream, Ocean drive, Golden hour, Soft graphite, Neon afterglow, Stargazer, Matcha morning, and Rose quartz. Character wallpapers are original illustrations made for Aura.
+- **Corner characters:** Violet muse and Moonlight waifu each show an actual transparent anime character near the bottom-right of Spotify, above the playback bar. They use quiet scene backgrounds so the small character is the focus. Characters stay still and let clicks pass through. Studio’s **Corner character** switch hides them; switching to another theme or disabling Aura removes them. They hide on short windows and fullscreen views. There are no character animations, sounds, or tracking.
 - **Find your mood:** browse All moods, Anime, Waifu, Aesthetic, or Minimal; search by name, mood, or description. Anime includes the two character themes and the two anime-inspired landscapes. Waifu shows the two character themes. **Surprise me** chooses within your current search and filter and avoids repeating the selected theme when alternatives exist.
 - **Instant themes:** choose a card to apply across open Spotify tabs. Choosing a theme enables Aura and resets the custom wallpaper and accent to that preset. Your font, darkness, and layout preferences are preserved.
 - **Font styles:** Studio includes Spotify original, Clean modern, Soft rounded, Editorial, Terminal, and Bookish. Preview each style on your theme title; the selected style applies to Spotify text and stays selected across themes and popup sessions. These use fonts installed on your device with sensible fallbacks; appearance varies by operating system. Spotify original restores Spotify’s own font, and the master switch also removes font overrides.
@@ -39,7 +40,9 @@ The sponsor page opens only when you click Sponsor. Aura does not load payment s
 
 ## Performance
 
-Plain JavaScript and CSS, static local artwork, and no background animation. Ten lightweight SVG scenes and two compressed WebP character wallpapers are bundled. The character wallpapers total about 390 KB; separate thumbnails total about 49 KB. Theme cards load lazily, while the full wallpaper is used for the selected theme. Fonts never require a network download. Themes apply with a handful of root attributes and CSS variables. No DOM observers, continuous page scans, or timers run in the Spotify content script. The service worker sleeps except for Chrome events. Player status updates every five seconds only while the popup’s extras panel is visible.
+Plain JavaScript and CSS, static local artwork, and no background animation. Ten lightweight SVG scenes, two WebP character illustrations, and two transparent character cutouts are bundled. The corner characters total about 87 KB; theme thumbnails total about 49 KB. Theme cards load lazily. Character themes use bundled scene backgrounds with a single small character image above the player. Fonts never require a network download. Themes apply with a handful of root attributes and CSS variables. No DOM observers, continuous page scans, or timers run in the Spotify content script. The service worker sleeps except for Chrome events. Player status updates every five seconds only while the popup’s extras panel is visible.
+
+The popup uses a compact theme preview and direct controls, without a decorative mock player or large promotional heading.
 
 ## Development and verification
 

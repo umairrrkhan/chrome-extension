@@ -44,3 +44,21 @@ html[data-aura-font] .Root {
   font-family:var(--aura-font) !important;
 }
 html[data-aura-font] .Root :is([data-encore-id="text"],h1,h2,h3,h4,p,button,input,.main-trackList-rowTitle,.main-trackInfo-name,.main-trackInfo-artists) { font-family:var(--aura-font) !important; }
+/* A still, click-through character, safely above Spotify's bottom player. */
+html[data-aura] #aura-companion {
+  all:initial;
+  position:fixed !important;
+  right:20px !important;
+  bottom:104px !important;
+  width:140px !important;
+  height:190px !important;
+  object-fit:contain !important;
+  object-position:bottom right !important;
+  pointer-events:none !important;
+  user-select:none !important;
+  z-index:5 !important;
+}
+html[data-aura] body:not(:has(.Root)) #aura-companion,
+html:has(:fullscreen) #aura-companion { display:none !important; }
+@media(max-width:900px) { html[data-aura] #aura-companion { width:96px !important; height:135px !important; right:12px !important; } }
+@media(max-height:600px) { html[data-aura] #aura-companion { display:none !important; } }

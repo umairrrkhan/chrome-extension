@@ -55,7 +55,7 @@
   }
   function render() {
     const theme = Aura.getTheme(settings.theme);
-    for (const key of ['enabled','focus','compact','reduceMotion']) $(`#${key}`).checked = settings[key];
+    for (const key of ['enabled','focus','compact','reduceMotion','companion']) $(`#${key}`).checked = settings[key];
     $('#accent').value = settings.accent || theme.accent;
     $('#dim').value = settings.dim;
     $('#dim-value').value = `${settings.dim}%`;
@@ -63,7 +63,12 @@
     $('#preview-name').textContent = theme.name;
     $('#preview-desc').textContent = theme.description;
     $('#preview-note').textContent = settings.enabled ? (settings.background ? 'Your wallpaper. Your world.' : 'A preview of your atmosphere') : 'Themes are paused';
-    $('.preview').style.setProperty('--preview-image',`url("${settings.background || Aura.artwork(theme)}")`);
+    $('.preview').style.setProperty('--preview-image',`url("${settings.background || theme.backdrop || Aura.artwork(theme)}")`);
+    $('#companion-setting').hidden = !theme.companion;
+    const character = $('#companion-preview');
+    character.hidden = !theme.companion || !settings.companion || !settings.enabled;
+    if (!character.hidden) character.src = theme.companion;
+    else character.removeAttribute('src');
     $('.preview').style.setProperty('--preview-accent',settings.accent || theme.accent);
     $('.preview').style.setProperty('--preview-shade',String(settings.dim / 100));
     $('#preview-name').style.fontFamily = Aura.getFont(settings.font).family;
@@ -198,7 +203,7 @@
         event.preventDefault(); selectTab(tabs[index].dataset.tab); tabs[index].focus();
       });
     });
-    for (const key of ['enabled','focus','compact','reduceMotion']) $(`#${key}`).addEventListener('change',event => { save({[key]:event.target.checked}); if (key === 'enabled') refreshPlayer(); });
+    for (const key of ['enabled','focus','compact','reduceMotion','companion']) $(`#${key}`).addEventListener('change',event => { save({[key]:event.target.checked}); if (key === 'enabled') refreshPlayer(); });
     $('#accent').addEventListener('input',event => save({accent:event.target.value}));
     $('#reset-accent').addEventListener('click',() => save({accent:''}));
     $('#dim').addEventListener('input',event => save({dim:Number(event.target.value)}));

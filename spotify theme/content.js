@@ -4,8 +4,31 @@
   const variables = ['accent','bg','panel','text','image','shade','font'];
   let settings = Aura.normalize();
   let revision = 0;
+  function syncCompanion() {
+    const theme = Aura.getTheme(settings.theme);
+    const existing = document.getElementById('aura-companion');
+    if (!settings.enabled || !settings.companion || !theme.companion) { existing?.remove(); return; }
+    if (!document.body) return;
+    const image = existing || document.createElement('img');
+    if (!existing) {
+      image.id = 'aura-companion';
+      image.alt = '';
+      image.setAttribute('aria-hidden','true');
+      image.draggable = false;
+      image.decoding = 'async';
+    }
+    if (image.dataset.theme !== theme.id) {
+      image.src = chrome.runtime.getURL(theme.companion);
+      image.dataset.theme = theme.id;
+    }
+    if (!existing) document.body.append(image);
+  }
+  // Content scripts start before body exists. One lifecycle event is enough;
+  // settings updates handle all subsequent changes without DOM observers.
+  document.addEventListener('DOMContentLoaded',syncCompanion,{once:true});
   function apply(value) {
     settings = Aura.normalize(value);
+    syncCompanion();
     for (const key of ['aura','auraCompact','auraFocus','auraMotion','auraFont']) delete root.dataset[key];
     for (const name of variables) root.style.removeProperty(`--aura-${name}`);
     if (!settings.enabled) return;
@@ -18,7 +41,7 @@
       root.dataset.auraFont = settings.font;
       root.style.setProperty('--aura-font',Aura.getFont(settings.font).family);
     }
-    const image = settings.background || chrome.runtime.getURL(Aura.artwork(theme));
+    const image = settings.background || chrome.runtime.getURL(theme.backdrop || Aura.artwork(theme));
     const values = {accent:settings.accent || theme.accent, bg:theme.bg, panel:theme.panel, text:theme.text, image:`url("${image}")`, shade:String(settings.dim / 100)};
     for (const [name,value] of Object.entries(values)) root.style.setProperty(`--aura-${name}`,value);
   }

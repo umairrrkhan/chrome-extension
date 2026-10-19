@@ -31,11 +31,19 @@ test('manifest only grants Spotify access and every declared resource exists',()
   assert.equal(manifest.manifest_version,3);
   assert.deepEqual(manifest.permissions,['storage','alarms']);
   assert.deepEqual(manifest.host_permissions,['https://open.spotify.com/*']);
-  const resources = [manifest.action.default_popup,manifest.background.service_worker,...Object.values(manifest.icons),...manifest.content_scripts.flatMap(script=>[...script.js,...script.css]),...themes.flatMap(t=>[artwork(t),thumbnail(t)])];
+  const resources = [manifest.action.default_popup,manifest.background.service_worker,...Object.values(manifest.icons),...manifest.content_scripts.flatMap(script=>[...script.js,...script.css]),...themes.flatMap(t=>[artwork(t),thumbnail(t),t.backdrop,t.companion].filter(Boolean))];
   for (const file of resources) assert.ok(fs.existsSync(path.join(root,file)),file);
   assert.equal(new Set(themes.map(t=>t.id)).size,12);
   for (const theme of themes) assert.match(theme.accent,/^#[a-f0-9]{6}$/i);
   for (const theme of themes.filter(t=>!t.format)) assert.ok(!fs.readFileSync(path.join(root,artwork(theme)),'utf8').includes('<script'));
+});
+
+test('corner characters are limited to the two character themes and preserve user preference',() => {
+  assert.equal(themes.filter(t=>t.companion).length,2);
+  assert.equal(normalize({theme:'violet-muse'}).companion,true);
+  assert.equal(normalize({theme:'moonlight-waifu',companion:false}).companion,false);
+  assert.equal(normalize({companion:'false'}).companion,true);
+  assert.equal(normalize({companion:false,enabled:false}).companion,false);
 });
 
 test('font preferences migrate old settings, persist valid presets, and reject injected font CSS',() => {
