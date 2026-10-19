@@ -1,0 +1,39 @@
+/* Deliberately scoped to Aura attributes: disabling removes every override. */
+html[data-aura] {
+  --background-base: var(--aura-bg) !important;
+  --background-highlight: var(--aura-panel) !important;
+  --background-press: var(--aura-panel) !important;
+  --background-elevated-base: var(--aura-panel) !important;
+  --background-elevated-highlight: var(--aura-panel) !important;
+  --text-base: var(--aura-text) !important;
+  --text-bright-accent: var(--aura-accent) !important;
+  --essential-bright-accent: var(--aura-accent) !important;
+  --background-tinted-base: var(--aura-panel) !important;
+  background: var(--aura-bg) !important;
+}
+html[data-aura] body { background: var(--aura-bg) !important; }
+html[data-aura] .Root {
+  background-image: linear-gradient(rgb(0 0 0 / var(--aura-shade)),rgb(0 0 0 / var(--aura-shade))),var(--aura-image) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+  color: var(--aura-text) !important;
+}
+html[data-aura] .Root__main-view { background:color-mix(in srgb,var(--aura-bg) 32%,transparent) !important; }
+html[data-aura] :is(.Root__nav-bar,.Root__right-sidebar) { background:color-mix(in srgb,var(--aura-bg) 82%,transparent) !important; }
+html[data-aura] :is(.Root__top-container,.main-view-container,.main-view-container__scroll-node,[data-testid="main-view"],[data-testid="playlist-page"],[data-testid="album-page"],[data-testid="artist-page"],[data-testid="home-page"],[data-testid="action-bar-row"]) { background:transparent !important; }
+html[data-aura] :is(.main-home-homeHeader,.main-entityHeader-backgroundColor,.main-actionBarBackground-background,.main-topBar-overlay) { background: transparent !important; }
+html[data-aura] :is(.Root__now-playing-bar,[data-testid="now-playing-bar"],.main-yourLibraryX-libraryRootlist) {
+  background: color-mix(in srgb,var(--aura-panel) 94%,transparent) !important;
+  color: var(--aura-text) !important;
+}
+html[data-aura] :is([data-testid="play-button"],.main-playButton-PlayButton) { --background-base:var(--aura-accent) !important; --background-highlight:var(--aura-accent) !important; }
+html[data-aura] :is(.progress-bar__fg,.progress-bar__slider) { background-color:var(--aura-accent) !important; }
+html[data-aura] :is([aria-current="page"],[aria-checked="true"]) { color:var(--aura-accent) !important; }
+html[data-aura] ::selection { background:var(--aura-accent); color:var(--aura-bg); }
+html[data-aura-compact] [data-testid="tracklist-row"] { height:44px !important; min-height:44px !important; }
+html[data-aura-compact] [data-testid="tracklist-row"] [data-testid="tracklist-row-image"] { width:32px !important; height:32px !important; }
+/* Collapse the right sidebar without hiding the player, queue controls, or library. */
+html[data-aura-focus] :is(.Root,.Root__top-container) { grid-template-areas:"global-nav global-nav" "left-sidebar main-view" "now-playing-bar now-playing-bar" !important; grid-template-columns:var(--left-sidebar-width,280px) minmax(0,1fr) !important; }
+html[data-aura-focus] .Root__right-sidebar { display:none !important; }
+html[data-aura-motion] *, html[data-aura-motion] *::before, html[data-aura-motion] *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }

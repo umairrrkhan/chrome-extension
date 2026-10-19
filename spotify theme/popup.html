@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aura · Your Spotify, your atmosphere</title>
+  <link rel="stylesheet" href="popup.css">
+  <script src="core.js" defer></script>
+  <script src="popup.js" defer></script>
+</head>
+<body>
+  <header class="header">
+    <a class="brand" href="#" aria-label="Aura home"><span class="brand-icon">a</span><span>aura<span class="brand-dot">.</span></span></a>
+    <span class="edition">FOR SPOTIFY</span>
+    <label class="switch master" title="Enable Aura"><input type="checkbox" id="enabled" checked aria-label="Enable themes"><span></span></label>
+  </header>
+  <main>
+    <div class="intro"><div class="eyebrow"><span></span> A LITTLE MORE YOU</div><h1>Your music.<br>Your atmosphere.</h1><p>Give your listening space a new feeling.</p><svg class="intro-flower" viewBox="0 0 100 100" aria-hidden="true"><g stroke="currentColor" stroke-width="9" stroke-linecap="round"><path d="M50 8v84M8 50h84M20 20l60 60M20 80l60-60"/></g></svg></div>
+    <section class="preview" aria-label="Preview of selected theme">
+      <div class="preview-top"><span class="preview-dots">● ● ●</span><span>YOUR SPOTIFY, REIMAGINED</span><span>↗</span></div>
+      <div class="mini-player"><div class="mini-art" aria-hidden="true">♫</div><div><span class="preview-caption">THE CURRENT MOOD</span><strong id="preview-name">Midnight in Tokyo</strong><span id="preview-desc">City lights. Headphones on. World off.</span></div><span class="preview-play" aria-hidden="true">▶︎</span></div>
+      <div class="mini-progress"><span></span></div>
+      <div class="preview-bottom"><span id="preview-note">A preview of your atmosphere</span><span class="live-label">✦ LIVE PREVIEW</span></div>
+    </section>
+    <nav class="tabs" aria-label="Customization sections" role="tablist">
+      <button id="tab-themes" role="tab" aria-selected="true" aria-controls="panel-themes" data-tab="themes">◈ <span>Themes</span><span class="tab-count">06</span></button>
+      <button id="tab-studio" role="tab" aria-selected="false" aria-controls="panel-studio" data-tab="studio" tabindex="-1">✧ <span>Studio</span></button>
+      <button id="tab-tools" role="tab" aria-selected="false" aria-controls="panel-tools" data-tab="tools" tabindex="-1">☷ <span>Little extras</span></button>
+    </nav>
+    <section id="panel-themes" role="tabpanel" aria-labelledby="tab-themes">
+      <div class="section-heading"><h2>Find your feeling</h2><span>CURATED BY AURA</span></div>
+      <div class="filters" role="group" aria-label="Filter themes"><button data-filter="all" aria-pressed="true">All moods</button><button data-filter="anime" aria-pressed="false">Anime</button><button data-filter="aesthetic" aria-pressed="false">Aesthetic</button><button data-filter="minimal" aria-pressed="false">Minimal</button></div>
+      <div id="theme-grid" class="theme-grid"></div>
+      <div class="tip"><span>✧</span><p>A different world, one click away.<br><strong>Your theme follows you across Spotify tabs.</strong></p></div>
+    </section>
+    <section id="panel-studio" role="tabpanel" aria-labelledby="tab-studio" hidden>
+      <div class="section-heading"><h2>Make it yours</h2><span>THE FINISHING TOUCHES</span></div>
+      <div class="settings-card">
+        <div class="setting"><div><label for="accent">Accent color</label><p>A little signature in every detail.</p></div><div class="color-control"><input type="color" id="accent" aria-label="Custom accent color"><button id="reset-accent" class="text-button">Reset</button></div></div>
+        <div class="setting stacked"><div class="range-heading"><label for="dim">Background darkness</label><output id="dim-value" for="dim">45%</output></div><input id="dim" type="range" min="0" max="80" value="45"><p>Keep your music easy to read.</p></div>
+      </div>
+      <div class="upload-card"><span class="upload-icon">▧</span><h3>Your own little world</h3><p>Bring a favorite wallpaper. We’ll keep it on this device.</p><label class="secondary-button upload-label" for="background-file">＋ Choose an image</label><input type="file" id="background-file" accept="image/jpeg,image/png,image/webp" class="visually-hidden"><button id="remove-background" class="text-button" hidden>Remove wallpaper</button><span class="file-hint">JPG, PNG or WebP · up to 8 MB</span></div>
+      <button id="reset-all" class="reset-button">↺ Reset appearance to default</button>
+    </section>
+    <section id="panel-tools" role="tabpanel" aria-labelledby="tab-tools" hidden>
+      <div class="section-heading"><h2>A better listening ritual</h2><span>SMALL THINGS, BIG FEELING</span></div>
+      <div class="settings-card">
+        <div class="setting"><div><label for="focus">Focus mode</label><p>Hide the right sidebar. Find your flow.</p></div><label class="switch"><input type="checkbox" id="focus"><span></span></label></div>
+        <div class="setting"><div><label for="compact">Compact tracklists</label><p>More songs. A little less scrolling.</p></div><label class="switch"><input type="checkbox" id="compact"><span></span></label></div>
+        <div class="setting"><div><label for="reduceMotion">Less motion</label><p>Keep your listening space still.</p></div><label class="switch"><input type="checkbox" id="reduceMotion"><span></span></label></div>
+      </div>
+      <div class="sleep-card"><div class="sleep-heading"><span>☾</span><div><h3>Drift off, we’ve got you.</h3><p>Pause all Spotify web tabs when time is up.</p></div></div><div class="timer-options" role="group" aria-label="Sleep timer duration"><button data-minutes="15">15 min</button><button data-minutes="30">30 min</button><button data-minutes="45">45 min</button><button data-minutes="60">1 hour</button></div><div class="timer-status"><span id="timer-label">No timer set</span><button id="cancel-timer" class="text-button" hidden>Cancel timer</button></div><p class="file-hint">Keep Chrome open. Sleeping devices pause on wake.</p></div>
+      <div class="playback-card"><div><span class="eyebrow">NOW PLAYING</span><strong id="track-title">Your next favorite awaits</strong><span id="track-artist">Open Spotify to start listening</span></div><div class="playback-controls"><button data-control="previous" aria-label="Previous track">Ⅰ◀</button><button data-control="toggle" aria-label="Play or pause" id="play-pause">▶</button><button data-control="next" aria-label="Next track">▶Ⅰ</button></div></div>
+    </section>
+    <div id="connection" class="connection"><span class="connection-dot"></span><span id="connection-label">Looking for your Spotify…</span><button id="open-spotify">Open Spotify ↗</button></div>
+  </main>
+  <footer><span><span class="tiny-logo">a</span> MADE FOR YOUR MAIN CHARACTER MOMENTS</span><span>v1.0</span></footer>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "name": "aura-spotify-themes",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A dependency-free Manifest V3 theme extension for the Spotify web player.",
+  "scripts": {"test": "node tests/extension.test.cjs", "test:browser": "node tests/browser.playwright.cjs", "check": "node --check core.js && node --check content.js && node --check popup.js && node --check background.js"}
+}
