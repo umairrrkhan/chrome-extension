@@ -1,0 +1,12 @@
+{
+  "name": "twitterpostdestroyer",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Development checks only; the extension has no runtime dependencies.",
+  "scripts": {
+    "test": "node tests/browser.cjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.0"
+  }
+}

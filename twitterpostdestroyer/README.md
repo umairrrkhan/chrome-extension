@@ -2,42 +2,60 @@
 
 Created by **Umair Khan**.
 
-A tiny, procedural stickman that walks, climbs, and clears posts from your view. Three tools: rocket launcher, hammer, and laser. Built as a dependency-free Chrome Manifest V3 extension.
+A small stickman that walks, climbs, and hides the posts you choose. Rocket launcher, hammer, and laser. A plain JavaScript Chrome Manifest V3 extension with no runtime dependencies, external fonts, or network requests.
 
-## Install in Chrome
+## Install
 
-1. Unzip the download.
-2. Go to `chrome://extensions` and turn on **Developer mode**.
-3. Click **Load unpacked** and choose the **twitterpostdestroyer** folder containing `manifest.json`.
-4. Refresh an open X / Twitter tab. Hover a post and click **⌖ Destroy**.
-5. Pin the extension for quick access to its settings and playground.
+1. Download this repository and keep the `twitterpostdestroyer` folder.
+2. Open `chrome://extensions` and enable **Developer mode**.
+3. Click **Load unpacked** and select that folder.
+4. Refresh X / Twitter. Hover a post and click **Destroy**.
 
-## Try it first
+To update an existing installation, replace the folder, click **Reload** on the extension's card in `chrome://extensions`, and refresh X.
 
-Open `demo.html` directly in a browser, or use **Try the playground** in the extension popup. No installation or account is required to use the demo.
+## Playground
+
+Open `demo.html` directly in a browser, or click **Try the playground** in the extension popup. The practice feed needs no installation or account.
 
 ## Controls
 
-- **1 / 2 / 3:** rocket launcher / hammer / laser (outside text fields).
-- **♪:** toggle synthesized sound effects (off initially).
-- **Undo:** restore the last hidden post, or use Undo on a post's placeholder.
-- **Ⅱ / ▶:** pause or resume target controls and the idle character.
-- **Reset feed:** restore all demo posts.
+- Hover or focus a post to reveal its target button.
+- Open the small corner menu to choose a tool, toggle sound, or pause.
+- **1 / 2 / 3** select the rocket launcher, hammer, or laser outside text fields.
+- **Escape** closes the corner menu.
+- **Undo** in the corner or below a hidden post restores it.
+- **Reset feed** restores all playground posts and clears effects.
 
-The character walks toward a post, climbs up to it, then uses your selected weapon. Each weapon has a distinct prop and effect. Animations pause in background tabs; reduced-motion preferences skip the travel and destruction animation. Hover controls track scrolling. New posts are detected as X updates the timeline.
+Sound starts off. Reduced-motion mode skips travel and destruction effects. Background tabs suspend JavaScript animation and audio. Pausing before impact cancels the attack.
 
-## Privacy and behavior
+## Lightweight by design
 
-Everything runs locally. The extension makes no network requests, has no analytics, and cannot delete posts from X. It hides posts only within the current page; refresh restores them. Settings are saved in Chrome's local extension storage. Only X and Twitter receive the content script. Permission: `storage` for preferences; no cookies, credentials, browsing history, or account permissions are used.
+- One shared target button, regardless of timeline length.
+- No feed-wide mutation observer, repeated feed scans, or per-post mouse handlers.
+- Moving inside a post does not trigger layout measurements. Scroll events are combined into one measurement per frame.
+- A 100 × 96 CSS-pixel canvas at rest, with a subtle compositor animation and no JavaScript animation loop.
+- A viewport canvas only during an action, with a 2.4-million-pixel budget. It shrinks back after the character returns home.
+- Forty short-lived particles per action, and transform/opacity effects without animated blur or brightness filters.
+- Up to 30 hidden posts per tab. The oldest is restored when that limit is reached to bound retained DOM and Undo state.
+- Each hidden post has a scoped observer to restore it if X reuses the element for another post.
+- Cleanup removes listeners, observers, animations, audio, placeholders, and retained post references.
 
-X may change its DOM in future. Post detection currently uses `article[data-testid="tweet"]`. Hidden posts are intentionally not saved between page loads; X can also recycle post DOM nodes during navigation.
+See [VERIFICATION.md](VERIFICATION.md) for measured comparisons and testing limits.
 
-## Files
+## Privacy
 
-- `manifest.json`: extension registration and scoped content script.
-- `engine.js`: shadow-DOM controls, canvas character, weapon effects, post handling.
-- `popup.html`, `popup.js`: settings and links.
-- `demo.html`, `demo.js`, `ui.css`: standalone interactive playground.
-- `icons/`: packaged extension icons.
+Posts are hidden only in the current page. Nothing is deleted from X; refreshing restores the feed. Preferences live in Chrome's local extension storage. The only permission is `storage`; content scripts run only on `x.com` and `twitter.com`. No analytics, cookies, account credentials, or browsing-history access.
 
-No build step, external scripts, remote fonts, or dependencies.
+X may change its HTML. Post detection uses `article[data-testid="tweet"]`, and recycling detection uses the post's status link.
+
+## Development checks
+
+The installed extension needs no build or package installation. Development tests use Playwright:
+
+```sh
+npm install
+npx playwright install chromium
+npm test
+```
+
+For a system Chromium, use `CHROMIUM_PATH=/usr/bin/chromium npm test`. Tests use local HTML fixtures and a mocked Chrome storage API; they do not access your X account. Screenshots are written to the ignored `test-results/` folder.

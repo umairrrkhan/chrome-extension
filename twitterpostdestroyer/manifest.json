@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Twitter Post Destroyer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A tiny stickman. A big arsenal. Clear unwanted posts from your view with playful physics and destruction.",
   "permissions": [
     "storage"
