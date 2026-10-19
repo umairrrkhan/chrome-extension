@@ -27,8 +27,11 @@ No `npm install` or build command is needed. The extension works in Chrome and C
 - **Sleep timer:** pause all open Spotify web tabs after 15, 30, 45, or 60 minutes. It survives closing the popup and browser restart. Chrome must be running; a sleeping device handles overdue alarms when it wakes. It does not control Spotify in other applications or other devices.
 - **Player controls:** previous, play/pause, and next on a connected web player. If several tabs are open, prefer a playing tab, then the most recently used available player.
 - **Master switch:** remove all Aura styling without losing your saved choices. This switch controls appearance; an already running sleep timer remains active until cancelled.
+- **Sponsor Aura:** the small Sponsor link in the header opens [your creator’s support page](https://umair.sbs/pay/) in a new tab. Support is optional; all extension features remain available.
 
 Changes save automatically on this device. Keyboard users can use arrow keys, Home, and End to move between tabs. The popup also respects the operating system’s reduced-motion preference.
+
+The sponsor page opens only when you click Sponsor. Aura does not load payment scripts or contact that site in the background.
 
 ## Privacy and permissions
 
