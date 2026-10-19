@@ -473,3 +473,17 @@ body.overlay .card small {
 #expand {
   flex-shrink: 0;
 }
+
+.sponsor-link {
+  font-size: 9px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 4px 7px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+}
+.sponsor-link:hover {
+  background: var(--input);
+  text-decoration: underline;
+}

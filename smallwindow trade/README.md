@@ -80,3 +80,11 @@ To regenerate the installable ZIP from the current source, run `python3 scripts/
 - Added Pause / Resume and market-specific symbol suggestions, with unused symbols for new cards.
 - Preserved data caches for appearance changes; isolated caches and pending requests by provider key.
 - Added failure cooldown, automatic reconnect handling, and robust ordering/validation of provider bars.
+
+## Sponsor
+
+Want to support continued development? Use **Sponsor this extension** in the popup or floating window to open https://umair.sbs/pay/ in a new tab. Sponsorship is optional and all extension features remain available.
+
+### 1.0.2
+
+- Added an optional sponsorship link in the popup and floating-window footer.

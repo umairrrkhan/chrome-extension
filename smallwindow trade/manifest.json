@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Smallwindow Trade",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Keep up to three market charts beside whatever you are browsing.",
   "minimum_chrome_version": "120",
   "permissions": ["storage", "activeTab", "scripting"],
