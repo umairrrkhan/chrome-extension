@@ -1,12 +1,12 @@
 (() => {
   'use strict';
   const root = document.documentElement;
-  const variables = ['accent','bg','panel','text','image','shade'];
+  const variables = ['accent','bg','panel','text','image','shade','font'];
   let settings = Aura.normalize();
   let revision = 0;
   function apply(value) {
     settings = Aura.normalize(value);
-    for (const key of ['aura','auraCompact','auraFocus','auraMotion']) delete root.dataset[key];
+    for (const key of ['aura','auraCompact','auraFocus','auraMotion','auraFont']) delete root.dataset[key];
     for (const name of variables) root.style.removeProperty(`--aura-${name}`);
     if (!settings.enabled) return;
     const theme = Aura.getTheme(settings.theme);
@@ -14,7 +14,11 @@
     if (settings.compact) root.dataset.auraCompact = '';
     if (settings.focus) root.dataset.auraFocus = '';
     if (settings.reduceMotion) root.dataset.auraMotion = '';
-    const image = settings.background || chrome.runtime.getURL(`assets/${theme.art}.svg`);
+    if (settings.font !== 'default') {
+      root.dataset.auraFont = settings.font;
+      root.style.setProperty('--aura-font',Aura.getFont(settings.font).family);
+    }
+    const image = settings.background || chrome.runtime.getURL(Aura.artwork(theme));
     const values = {accent:settings.accent || theme.accent, bg:theme.bg, panel:theme.panel, text:theme.text, image:`url("${image}")`, shade:String(settings.dim / 100)};
     for (const [name,value] of Object.entries(values)) root.style.setProperty(`--aura-${name}`,value);
   }

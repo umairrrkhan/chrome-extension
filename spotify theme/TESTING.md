@@ -2,10 +2,10 @@
 
 ## Passed
 
-- `npm test`: seven tests passed. Covers corrupted input, appearance persistence, manifest resources and least-privilege access, timer creation/cancellation, sender validation, pausing all tabs despite closed-tab errors, and restoring overdue alarms after browser restart.
+- `npm test`: nine tests passed. Covers corrupted input, appearance persistence, the twelve themes and their resources, least-privilege access, font preference migration and validation, combined theme search/filter behavior, timer creation/cancellation, sender validation, pausing all tabs despite closed-tab errors, and restoring overdue alarms after browser restart.
 - `npm run check`: all four production JavaScript files pass syntax checks.
-- `npm run test:browser` with local Chromium and Playwright: popup filters, theme persistence, custom accents, background darkness, image upload/removal, focus/compact/motion settings, appearance reset, and keyboard tab navigation pass.
-- The same browser test executes the actual content script against a Spotify-shaped HTML fixture: initial theme, live storage changes, CSS application, restoration when disabled, track status, and idempotent pause commands pass. No browser page errors.
+- `npm run test:browser` with local Chromium and Playwright: all twelve themes, Anime/Waifu filters, character image loading, search, empty results and recovery, Surprise me, theme persistence, six font options, font persistence across theme changes and popup reload, custom accents, background darkness, image upload/removal, focus/compact/motion settings, appearance reset, and keyboard tab navigation pass.
+- The same browser test executes the actual content script against a Spotify-shaped HTML fixture: initial theme, live storage changes, CSS application, serif/monospace font changes, restoration of the original font and layout when disabled, track status, and idempotent pause commands pass. No browser page errors.
 
 ## Still requires a manual check
 

@@ -5,6 +5,7 @@
   const extension = typeof chrome !== 'undefined' && !!chrome.storage?.local;
   let settings = Aura.normalize();
   let filter = 'all';
+  let query = '';
   let spotifyTab = null;
   let toastTimeout;
   let sleepUntil = 0;
@@ -19,18 +20,37 @@
     clearTimeout(toastTimeout);
     toastTimeout = setTimeout(() => $('#toast').classList.remove('visible'),3400);
   }
+  function visibleThemes() { return Aura.themes.filter(theme => Aura.matchesTheme(theme,filter,query)); }
+  function selectTheme(id) {
+    save({theme:id,accent:'',background:'',enabled:true});
+    toast(`${Aura.getTheme(id).name} — your new atmosphere.`);
+  }
   function renderThemes() {
     const grid = $('#theme-grid');
     grid.replaceChildren();
-    for (const theme of Aura.themes.filter(t => filter === 'all' || t.category === filter)) {
+    const results = visibleThemes();
+    $('#theme-count').textContent = String(Aura.themes.length).padStart(2,'0');
+    $('#theme-results').textContent = `${results.length} ${results.length === 1 ? 'atmosphere' : 'atmospheres'} to make your own`;
+    $('#empty-themes').hidden = results.length > 0;
+    $('#surprise').disabled = results.length === 0;
+    for (const theme of results) {
       const card = document.createElement('button');
       card.className = 'theme-card';
       card.dataset.theme = theme.id;
       card.setAttribute('aria-pressed',String(settings.theme === theme.id));
       card.setAttribute('aria-label',`Apply ${theme.name} theme`);
       // All interpolated values below come exclusively from bundled theme data.
-      card.innerHTML = `<img class="theme-art" src="assets/${theme.art}.svg" alt="" width="178" height="88"><span class="selected-badge" aria-hidden="true">✓</span><span class="theme-info"><span class="theme-title">${theme.name}<span class="swatches" aria-hidden="true"><i style="background:${theme.accent}"></i><i style="background:${theme.panel}"></i><i style="background:${theme.bg}"></i></span></span><span class="theme-label">${theme.label}</span></span>`;
+      card.innerHTML = `<img class="theme-art" src="${Aura.thumbnail(theme)}" alt="" width="178" height="98" loading="lazy" decoding="async"><span class="selected-badge" aria-hidden="true">✓</span><span class="theme-info"><span class="theme-title">${theme.name}<span class="swatches" aria-hidden="true"><i style="background:${theme.accent}"></i><i style="background:${theme.panel}"></i><i style="background:${theme.bg}"></i></span></span><span class="theme-label">${theme.label}</span></span>`;
       grid.append(card);
+    }
+  }
+  function renderFonts() {
+    for (const font of Aura.fonts) {
+      const option = document.createElement('label');
+      option.className = 'font-option';
+      option.innerHTML = `<input type="radio" name="font" value="${font.id}"><span class="font-option-body"><span class="font-sample" aria-hidden="true">${font.sample}</span><span><strong>${font.name}</strong><small>${font.note}</small></span><span class="font-check" aria-hidden="true">✓</span></span>`;
+      option.querySelector('.font-sample').style.fontFamily = font.family || 'system-ui, sans-serif';
+      $('#font-grid').append(option);
     }
   }
   function render() {
@@ -43,9 +63,11 @@
     $('#preview-name').textContent = theme.name;
     $('#preview-desc').textContent = theme.description;
     $('#preview-note').textContent = settings.enabled ? (settings.background ? 'Your wallpaper. Your world.' : 'A preview of your atmosphere') : 'Themes are paused';
-    $('.preview').style.setProperty('--preview-image',`url("${settings.background || `assets/${theme.art}.svg`}")`);
+    $('.preview').style.setProperty('--preview-image',`url("${settings.background || Aura.artwork(theme)}")`);
     $('.preview').style.setProperty('--preview-accent',settings.accent || theme.accent);
     $('.preview').style.setProperty('--preview-shade',String(settings.dim / 100));
+    $('#preview-name').style.fontFamily = Aura.getFont(settings.font).family;
+    $$('input[name="font"]').forEach(input => input.checked = input.value === settings.font);
     document.body.classList.toggle('paused',!settings.enabled);
     $$('.theme-card').forEach(card => card.setAttribute('aria-pressed',String(card.dataset.theme === settings.theme)));
   }
@@ -136,13 +158,27 @@
       settings = Aura.normalize(data.settings);
       sleepUntil = data.sleepUntil || 0;
     } catch { toast('Couldn’t load saved preferences. Defaults are ready.'); }
-    renderThemes(); render(); renderTimer();
+    renderThemes(); renderFonts(); render(); renderTimer();
     $('.brand').addEventListener('click',event => { event.preventDefault(); selectTab('themes'); });
     $('#theme-grid').addEventListener('click',event => {
       const card = event.target.closest('[data-theme]');
       if (!card) return;
-      save({theme:card.dataset.theme,accent:'',background:'',enabled:true});
-      toast(`${Aura.getTheme(card.dataset.theme).name} — your new atmosphere.`);
+      selectTheme(card.dataset.theme);
+    });
+    $('#font-grid').addEventListener('change',event => {
+      if (event.target.matches('input[name="font"]')) save({font:event.target.value});
+    });
+    $('#theme-search').addEventListener('input',event => { query = event.target.value; renderThemes(); });
+    $('#surprise').addEventListener('click',() => {
+      const results = visibleThemes();
+      const alternatives = results.filter(theme => theme.id !== settings.theme);
+      const pool = alternatives.length ? alternatives : results;
+      if (pool.length) selectTheme(pool[Math.floor(Math.random()*pool.length)].id);
+    });
+    $('#clear-search').addEventListener('click',() => {
+      query = ''; filter = 'all'; $('#theme-search').value = '';
+      $$('[data-filter]').forEach(item => item.setAttribute('aria-pressed',String(item.dataset.filter === 'all')));
+      renderThemes(); $('#theme-search').focus();
     });
     $$('[data-filter]').forEach(button => button.addEventListener('click',() => {
       filter = button.dataset.filter;

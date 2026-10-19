@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const {normalize,defaults,themes} = require('../core.js');
+const {normalize,defaults,themes,fonts,getTheme,getFont,artwork,thumbnail,matchesTheme} = require('../core.js');
 const root = path.resolve(__dirname,'..');
 
 test('corrupt stored settings safely recover without allowing CSS or URL injection',() => {
@@ -31,11 +31,28 @@ test('manifest only grants Spotify access and every declared resource exists',()
   assert.equal(manifest.manifest_version,3);
   assert.deepEqual(manifest.permissions,['storage','alarms']);
   assert.deepEqual(manifest.host_permissions,['https://open.spotify.com/*']);
-  const resources = [manifest.action.default_popup,manifest.background.service_worker,...Object.values(manifest.icons),...manifest.content_scripts.flatMap(script=>[...script.js,...script.css]),...themes.map(t=>`assets/${t.art}.svg`)];
+  const resources = [manifest.action.default_popup,manifest.background.service_worker,...Object.values(manifest.icons),...manifest.content_scripts.flatMap(script=>[...script.js,...script.css]),...themes.flatMap(t=>[artwork(t),thumbnail(t)])];
   for (const file of resources) assert.ok(fs.existsSync(path.join(root,file)),file);
-  assert.equal(new Set(themes.map(t=>t.id)).size,6);
+  assert.equal(new Set(themes.map(t=>t.id)).size,12);
   for (const theme of themes) assert.match(theme.accent,/^#[a-f0-9]{6}$/i);
-  for (const theme of themes) assert.ok(!fs.readFileSync(path.join(root,`assets/${theme.art}.svg`),'utf8').includes('<script'));
+  for (const theme of themes.filter(t=>!t.format)) assert.ok(!fs.readFileSync(path.join(root,artwork(theme)),'utf8').includes('<script'));
+});
+
+test('font preferences migrate old settings, persist valid presets, and reject injected font CSS',() => {
+  assert.equal(normalize({theme:'sakura'}).font,'default');
+  for (const font of fonts) assert.equal(normalize(JSON.parse(JSON.stringify({font:font.id}))).font,font.id);
+  for (const value of ['Unknown',null,12,'serif; color:red','url(https://example.com/font)']) assert.equal(normalize({font:value}).font,'default');
+  assert.equal(getFont('unknown').id,'default');
+  assert.equal(getTheme('unknown').id,'midnight','Adding themes must not change the fallback theme');
+});
+
+test('anime and waifu filters overlap while search and category combine correctly',() => {
+  assert.equal(themes.filter(t=>matchesTheme(t,'anime')).length,4);
+  assert.equal(themes.filter(t=>matchesTheme(t,'waifu')).length,2);
+  assert.equal(themes.filter(t=>matchesTheme(t,'waifu',' MOONLIGHT '))[0].id,'moonlight-waifu');
+  assert.equal(themes.filter(t=>matchesTheme(t,'minimal','rose')).length,1);
+  assert.equal(themes.filter(t=>matchesTheme(t,'anime','matcha')).length,0);
+  assert.equal(themes.filter(t=>matchesTheme(t,'all','<img src=x>')).length,0);
 });
 
 function background() {

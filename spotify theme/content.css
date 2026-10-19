@@ -37,3 +37,10 @@ html[data-aura-compact] [data-testid="tracklist-row"] [data-testid="tracklist-ro
 html[data-aura-focus] :is(.Root,.Root__top-container) { grid-template-areas:"global-nav global-nav" "left-sidebar main-view" "now-playing-bar now-playing-bar" !important; grid-template-columns:var(--left-sidebar-width,280px) minmax(0,1fr) !important; }
 html[data-aura-focus] .Root__right-sidebar { display:none !important; }
 html[data-aura-motion] *, html[data-aura-motion] *::before, html[data-aura-motion] *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+html[data-aura-font] .Root {
+  --encore-body-font-stack:var(--aura-font) !important;
+  --encore-title-font-stack:var(--aura-font) !important;
+  --glue-font-family:var(--aura-font) !important;
+  font-family:var(--aura-font) !important;
+}
+html[data-aura-font] .Root :is([data-encore-id="text"],h1,h2,h3,h4,p,button,input,.main-trackList-rowTitle,.main-trackInfo-name,.main-trackInfo-artists) { font-family:var(--aura-font) !important; }

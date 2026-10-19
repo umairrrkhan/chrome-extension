@@ -23,14 +23,17 @@
       <div class="preview-bottom"><span id="preview-note">A preview of your atmosphere</span><span class="live-label">✦ LIVE PREVIEW</span></div>
     </section>
     <nav class="tabs" aria-label="Customization sections" role="tablist">
-      <button id="tab-themes" role="tab" aria-selected="true" aria-controls="panel-themes" data-tab="themes">◈ <span>Themes</span><span class="tab-count">06</span></button>
+      <button id="tab-themes" role="tab" aria-selected="true" aria-controls="panel-themes" data-tab="themes">◈ <span>Themes</span><span class="tab-count" id="theme-count"></span></button>
       <button id="tab-studio" role="tab" aria-selected="false" aria-controls="panel-studio" data-tab="studio" tabindex="-1">✧ <span>Studio</span></button>
       <button id="tab-tools" role="tab" aria-selected="false" aria-controls="panel-tools" data-tab="tools" tabindex="-1">☷ <span>Little extras</span></button>
     </nav>
     <section id="panel-themes" role="tabpanel" aria-labelledby="tab-themes">
       <div class="section-heading"><h2>Find your feeling</h2><span>CURATED BY AURA</span></div>
-      <div class="filters" role="group" aria-label="Filter themes"><button data-filter="all" aria-pressed="true">All moods</button><button data-filter="anime" aria-pressed="false">Anime</button><button data-filter="aesthetic" aria-pressed="false">Aesthetic</button><button data-filter="minimal" aria-pressed="false">Minimal</button></div>
+      <div class="filters" role="group" aria-label="Filter themes"><button data-filter="all" aria-pressed="true">All moods</button><button data-filter="anime" aria-pressed="false">Anime</button><button data-filter="waifu" aria-pressed="false">Waifu</button><button data-filter="aesthetic" aria-pressed="false">Aesthetic</button><button data-filter="minimal" aria-pressed="false">Minimal</button></div>
+      <div class="theme-search"><input type="search" id="theme-search" placeholder="Find your vibe…" aria-label="Search themes" maxlength="100"><button id="surprise" title="Pick a theme from the current results">✧ Surprise me</button></div>
+      <p id="theme-results" role="status" aria-live="polite"></p>
       <div id="theme-grid" class="theme-grid"></div>
+      <div id="empty-themes" class="empty-themes" hidden><span aria-hidden="true">✧</span><h3>No moods found, yet.</h3><p>Try another word or explore the whole collection.</p><button id="clear-search" class="secondary-button">Show all themes</button></div>
       <div class="tip"><span>✧</span><p>A different world, one click away.<br><strong>Your theme follows you across Spotify tabs.</strong></p></div>
     </section>
     <section id="panel-studio" role="tabpanel" aria-labelledby="tab-studio" hidden>
@@ -39,6 +42,9 @@
         <div class="setting"><div><label for="accent">Accent color</label><p>A little signature in every detail.</p></div><div class="color-control"><input type="color" id="accent" aria-label="Custom accent color"><button id="reset-accent" class="text-button">Reset</button></div></div>
         <div class="setting stacked"><div class="range-heading"><label for="dim">Background darkness</label><output id="dim-value" for="dim">45%</output></div><input id="dim" type="range" min="0" max="80" value="45"><p>Keep your music easy to read.</p></div>
       </div>
+      <div class="section-heading"><h2>A different kind of character</h2><span>FONT STYLES</span></div>
+      <fieldset class="font-fieldset"><legend class="visually-hidden">Spotify font style</legend><div id="font-grid" class="font-grid"></div></fieldset>
+      <p class="font-hint">Pairs with every theme. Styles use fonts on your device.</p>
       <div class="upload-card"><span class="upload-icon">▧</span><h3>Your own little world</h3><p>Bring a favorite wallpaper. We’ll keep it on this device.</p><label class="secondary-button upload-label" for="background-file">＋ Choose an image</label><input type="file" id="background-file" accept="image/jpeg,image/png,image/webp" class="visually-hidden"><button id="remove-background" class="text-button" hidden>Remove wallpaper</button><span class="file-hint">JPG, PNG or WebP · up to 8 MB</span></div>
       <button id="reset-all" class="reset-button">↺ Reset appearance to default</button>
     </section>
@@ -54,7 +60,7 @@
     </section>
     <div id="connection" class="connection"><span class="connection-dot"></span><span id="connection-label">Looking for your Spotify…</span><button id="open-spotify">Open Spotify ↗</button></div>
   </main>
-  <footer><span><span class="tiny-logo">a</span> MADE FOR YOUR MAIN CHARACTER MOMENTS</span><span>v1.0</span></footer>
+  <footer><span><span class="tiny-logo">a</span> MADE FOR YOUR MAIN CHARACTER MOMENTS</span><span>v1.1</span></footer>
   <div id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

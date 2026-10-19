@@ -16,8 +16,10 @@ No `npm install` or build command is needed. The extension works in Chrome and C
 
 ## Inside Aura
 
-- **Six bundled scenes:** Sakura dreams and Midnight in Tokyo (original anime-inspired landscapes), Forest daydream, Ocean drive, Golden hour, and Soft graphite.
-- **Instant themes:** choose a card to apply across open Spotify tabs. Choosing a theme enables Aura and resets the custom wallpaper and accent to that preset. Darkness and layout preferences are preserved.
+- **Twelve bundled themes:** Violet muse (anime girl), Moonlight waifu, Sakura dreams, Midnight in Tokyo, Forest daydream, Ocean drive, Golden hour, Soft graphite, Neon afterglow, Stargazer, Matcha morning, and Rose quartz. Character wallpapers are original illustrations made for Aura.
+- **Find your mood:** browse All moods, Anime, Waifu, Aesthetic, or Minimal; search by name, mood, or description. Anime includes the two character themes and the two anime-inspired landscapes. Waifu shows the two character themes. **Surprise me** chooses within your current search and filter and avoids repeating the selected theme when alternatives exist.
+- **Instant themes:** choose a card to apply across open Spotify tabs. Choosing a theme enables Aura and resets the custom wallpaper and accent to that preset. Your font, darkness, and layout preferences are preserved.
+- **Font styles:** Studio includes Spotify original, Clean modern, Soft rounded, Editorial, Terminal, and Bookish. Preview each style on your theme title; the selected style applies to Spotify text and stays selected across themes and popup sessions. These use fonts installed on your device with sensible fallbacks; appearance varies by operating system. Spotify original restores Spotify’s own font, and the master switch also removes font overrides.
 - **Studio:** custom accent, background darkness, or your own JPG/PNG/WebP wallpaper. Images stay local and are resized to at most 1600 pixels before saving.
 - **Focus mode:** hide Spotify’s right sidebar while keeping the library and player.
 - **Compact tracklists:** fit more tracks on screen.
@@ -34,7 +36,7 @@ Changes save automatically on this device. Keyboard users can use arrow keys, Ho
 
 ## Performance
 
-Plain JavaScript and CSS, static local SVG artwork, and no background animation. Themes apply with a handful of root attributes and CSS variables. No DOM observers, continuous page scans, or timers run in the Spotify content script. The service worker sleeps except for Chrome events. Player status updates every five seconds only while the popup’s extras panel is visible.
+Plain JavaScript and CSS, static local artwork, and no background animation. Ten lightweight SVG scenes and two compressed WebP character wallpapers are bundled. The character wallpapers total about 390 KB; separate thumbnails total about 49 KB. Theme cards load lazily, while the full wallpaper is used for the selected theme. Fonts never require a network download. Themes apply with a handful of root attributes and CSS variables. No DOM observers, continuous page scans, or timers run in the Spotify content script. The service worker sleeps except for Chrome events. Player status updates every five seconds only while the popup’s extras panel is visible.
 
 ## Development and verification
 
@@ -51,10 +53,10 @@ Optional browser checks use Playwright as a development-only tool (`npm install 
 
 To preview the interface, open `popup.html` in Chrome. Outside an installed extension it explicitly shows **Design preview** and saves preview choices in local browser storage; player and timer actions are disabled. For full functionality load the unpacked extension.
 
-For a manual acceptance check: choose each theme in Spotify, navigate to an album and playlist, upload a wallpaper, reopen the popup, toggle compact/focus/motion, disable Aura, then re-enable. Start and cancel a timer, and verify a timer actually pauses a playing web tab. Check a non-English Spotify UI if you use one: Spotify’s button labels and DOM can vary between versions and locales.
+For a manual acceptance check: choose each theme in Spotify, navigate to an album and playlist, upload a wallpaper, pick a font in Studio, switch themes, reopen the popup, and confirm the font persists. Restore Spotify original, toggle compact/focus/motion, disable Aura, then re-enable. Start and cancel a timer, and verify a timer actually pauses a playing web tab. Check a non-English Spotify UI if you use one: Spotify’s button labels and DOM can vary between versions and locales.
 
 ## Compatibility
 
-Spotify changes its private page markup frequently. Player actions and sidebar/tracklist selectors are isolated in `content.js` and `content.css` for easy maintenance. If Aura reports “Refresh Spotify once,” reload a web-player tab opened before installing or reloading the extension. Theme artwork is original bundled vector scenery, rather than licensed anime characters.
+Spotify changes its private page markup frequently. Player actions and sidebar/tracklist selectors are isolated in `content.js` and `content.css` for easy maintenance. If Aura reports “Refresh Spotify once,” reload a web-player tab opened before installing or reloading the extension. Artwork is original bundled scenery and generated anime character illustrations, rather than existing franchise characters. See `assets/README.md` for asset details.
 
 No logged-in Spotify account is included with this project; final compatibility with the user’s current Spotify layout should be checked on their account before publishing to the Chrome Web Store. Store publication also requires listing assets and a privacy policy.
