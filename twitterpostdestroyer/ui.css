@@ -70,3 +70,6 @@ footer { display:flex; justify-content:space-between; margin-top:24px; font-size
 @media(max-width:900px) { .layout { padding:25px 24px 80px; }.topbar { padding:0 24px; }.workspace { grid-template-columns:minmax(0,1fr) 250px; gap:20px; }h1 { font-size:40px; }.hero-art { right:-60px; opacity:.5; } }
 @media(max-width:680px) { .topbar { padding:0 18px; height:64px; }.layout { padding:18px 18px 90px; }.workspace { grid-template-columns:1fr; }.hero-art { display:none; }.brand-context { display:none; }.hero { padding:16px 0 28px; }h1 { font-size:38px; }.hero p br { display:none; }.feed-tabs .muted { display:none; }.post-text { margin-left:0; }.post-actions { margin-left:0; }.post-head { padding-right:75px; }.post-name { font-size:11px; }article { padding:18px; }.help-note { padding-bottom:0; } }
 @media(prefers-reduced-motion:reduce) { .toggle:before { transition:none; } }
+
+.sponsor { display:inline-flex; align-items:center; gap:6px; color:var(--orange); }
+.sponsor:hover { text-decoration:underline; text-underline-offset:3px; }

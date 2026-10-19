@@ -4,7 +4,7 @@
 body { width:348px; margin:0; }
 button { font:inherit; color:inherit; cursor:pointer; }
 button:disabled { cursor:wait; opacity:.55; }
-button:focus-visible { outline:2px solid #f09a76; outline-offset:3px; }
+button:focus-visible,a:focus-visible { outline:2px solid #f09a76; outline-offset:3px; }
 [hidden] { display:none !important; }
 header { display:flex; align-items:center; gap:9px; padding:16px 22px; border-bottom:1px solid #2c2e30; }
 header strong { letter-spacing:-.3px; font-size:14px; }
@@ -41,3 +41,6 @@ h1 { margin:0 0 6px; font-size:24px; letter-spacing:-.8px; line-height:1.2; }
 footer { display:flex; justify-content:space-between; color:#7c858b; padding:9px 22px 18px; font-size:9px; }
 #error { color:#f3bda4; font-size:11px; }
 @media(prefers-reduced-motion:reduce) { .toggle:before { transition:none; } }
+
+.sponsor { display:inline-flex; align-items:center; gap:5px; color:#dca184; text-decoration:none; font-size:10px; }
+.sponsor:hover { color:#f5c2a9; text-decoration:underline; text-underline-offset:3px; }

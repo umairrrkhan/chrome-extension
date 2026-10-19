@@ -48,6 +48,10 @@ Posts are hidden only in the current page. Nothing is deleted from X; refreshing
 
 X may change its HTML. Post detection uses `article[data-testid="tweet"]`, and recycling detection uses the post's status link.
 
+## Support development
+
+[Sponsor this project](https://umair.sbs/pay/) to support Umair Khan’s work. The popup and playground include this link; it opens in a new tab only when clicked.
+
 ## Development checks
 
 The installed extension needs no build or package installation. Development tests use Playwright:
