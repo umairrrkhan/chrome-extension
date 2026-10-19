@@ -46,3 +46,25 @@ test("flat charts remain finite, demo prices are explicitly marked", () => {
   assert.equal(demoSeries("AAPL").demo, true);
   assert.equal(demoSeries("AAPL").points.length, 48);
 });
+
+test("provider parsing tolerates malformed rows, sorts dates, and removes duplicates", () => {
+  const data = parseSeries(
+    {
+      values: [
+        null,
+        { datetime: "2026-10-19", close: "120" },
+        { datetime: "2026-10-17", close: "90" },
+        { datetime: "2026-10-18", close: "100" },
+        { datetime: "2026-10-18", close: "100" },
+        { close: "500" },
+      ],
+    },
+    "AAPL",
+  );
+  assert.deepEqual(
+    data.points.map((point) => point.value),
+    [90, 100, 120],
+  );
+  assert.equal(data.time, "2026-10-19");
+  assert.throws(() => parseSeries(null, "AAPL"), /invalid response/);
+});

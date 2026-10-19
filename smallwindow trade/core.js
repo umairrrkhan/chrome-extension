@@ -49,15 +49,19 @@ export function cleanSettings(raw = {}) {
   };
 }
 export function parseSeries(body, symbol) {
+  if (!body || typeof body !== "object")
+    throw new Error("The provider returned an invalid response.");
   if (body.status === "error")
     throw new Error(body.message || "Data provider rejected this symbol.");
   if (!Array.isArray(body.values) || body.values.length < 2)
     throw new Error("No chart data available for this symbol.");
   const points = body.values
-    .slice()
-    .reverse()
+    .filter((x) => x && typeof x.datetime === "string" && x.datetime.trim())
     .map((x) => ({ time: x.datetime, value: Number(x.close) }))
-    .filter((x) => Number.isFinite(x.value) && x.value > 0);
+    .filter((x) => Number.isFinite(x.value) && x.value > 0)
+    .sort((a, b) => a.time.localeCompare(b.time))
+    .filter((x, i, all) => !i || x.time !== all[i - 1].time)
+    .slice(-48);
   if (points.length < 2)
     throw new Error("The provider returned invalid prices.");
   return {

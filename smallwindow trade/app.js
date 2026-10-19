@@ -13,14 +13,17 @@ let settings = { ...DEFAULTS },
   busy = false,
   generation = 0,
   collapsed = false,
-  latest = [],
+  paused = false,
+  editorId = 0,
   settingsOpen = false;
 if (overlay) document.body.classList.add("overlay");
 function parentMessage(type, extra = {}) {
   if (overlay) parent.postMessage({ type, ...extra }, "*");
 }
 new ResizeObserver(() =>
-  parentMessage("swt-size", { height: document.documentElement.scrollHeight }),
+  parentMessage("swt-size", {
+    height: Math.ceil(document.body.getBoundingClientRect().height),
+  }),
 ).observe(document.body);
 async function read() {
   if (extension) return chrome.storage.local.get(["settings", "apiKey"]);
@@ -45,10 +48,7 @@ function apply() {
     settings.mode === "demo"
       ? "Demo mode · illustrative prices, not market data. Connect Twelve Data in Settings for market prices."
       : "Twelve Data · prices may be delayed by your plan or exchange. Change is over the displayed chart. Monitoring only; no order execution.";
-  $("footer-status").textContent =
-    settings.mode === "demo"
-      ? "Demo workspace"
-      : `Refresh · every ${settings.refresh / 60} min`;
+  updateStatus();
 }
 function element(tag, cls, text) {
   const el = document.createElement(tag);
@@ -58,7 +58,7 @@ function element(tag, cls, text) {
 }
 function render(results) {
   $("cards").replaceChildren();
-  latest = results;
+
   results.forEach((result, i) => {
     const item = settings.symbols[i];
     if (!item) return;
@@ -137,7 +137,15 @@ function render(results) {
     .join(" · ");
 }
 async function refresh() {
-  if (busy || collapsed || settingsOpen || document.hidden) return;
+  if (
+    busy ||
+    paused ||
+    collapsed ||
+    settingsOpen ||
+    document.hidden ||
+    (settings.mode === "live" && !navigator.onLine)
+  )
+    return;
   busy = true;
   const current = ++generation;
   $("refresh").disabled = true;
@@ -166,14 +174,46 @@ async function refresh() {
     if (current === generation) render(results);
   } finally {
     busy = false;
-    $("refresh").disabled = false;
+    updateStatus();
     $("refresh").textContent = "↻ Refresh";
     if (current !== generation) queueMicrotask(refresh);
   }
 }
+function updateStatus() {
+  $("pause").textContent = paused ? "Resume" : "Pause";
+  $("pause").setAttribute("aria-pressed", String(paused));
+  $("refresh").disabled =
+    paused || (settings.mode === "live" && !navigator.onLine) || busy;
+  $("footer-status").textContent =
+    settings.mode === "live" && !navigator.onLine
+      ? "Offline · showing last prices"
+      : paused
+        ? "Paused · prices are not updating"
+        : settings.mode === "demo"
+          ? "Demo workspace"
+          : `Refresh · every ${settings.refresh / 60} min`;
+}
 function schedule() {
   clearInterval(timer);
-  if (!document.hidden && !collapsed && !settingsOpen) {
+  updateStatus();
+  if (
+    settings.mode === "live" &&
+    !navigator.onLine &&
+    !$("cards").children.length
+  ) {
+    render(
+      settings.symbols.map(() => ({
+        error: "You’re offline. Reconnect to load market prices.",
+      })),
+    );
+  }
+  if (
+    (settings.mode === "demo" || navigator.onLine) &&
+    !document.hidden &&
+    !paused &&
+    !collapsed &&
+    !settingsOpen
+  ) {
     refresh();
     timer = setInterval(refresh, settings.refresh * 1000);
   }
@@ -194,7 +234,11 @@ function editor(item) {
     line = element("div", "editor-line"),
     market = element("select"),
     symbol = element("input"),
-    remove = element("button", "", "×");
+    remove = element("button", "", "×"),
+    suggestions = element("datalist");
+  suggestions.id = `symbols-${++editorId}`;
+  symbol.setAttribute("list", suggestions.id);
+  symbol.autocomplete = "off";
   market.setAttribute("aria-label", "Market");
   Object.keys(MARKETS)
     .concat("Custom")
@@ -215,11 +259,22 @@ function editor(item) {
     if ($("symbol-editors").children.length > 1) row.remove();
     updateAdd();
   };
+  const suggest = () => {
+    suggestions.replaceChildren(
+      ...(MARKETS[market.value] || []).map((value) => {
+        const option = element("option");
+        option.value = value;
+        return option;
+      }),
+    );
+  };
   market.onchange = () => {
     if (MARKETS[market.value]) symbol.value = MARKETS[market.value][0];
+    suggest();
   };
+  suggest();
   line.append(market, symbol, remove);
-  row.append(line);
+  row.append(line, suggestions);
   $("symbol-editors").append(row);
   updateAdd();
 }
@@ -252,7 +307,21 @@ $("refresh").onclick = refresh;
 $("mode").onchange = () => {
   $("key-field").hidden = $("mode").value === "demo";
 };
-$("add-symbol").onclick = () => editor({ symbol: "NVDA", market: "US stocks" });
+$("add-symbol").onclick = () => {
+  if ($("symbol-editors").children.length >= 3) return;
+  const used = [...$("symbol-editors").querySelectorAll("input")].map((input) =>
+    input.value.trim().toUpperCase(),
+  );
+  editor({
+    symbol:
+      MARKETS["US stocks"].find((symbol) => !used.includes(symbol)) || "NVDA",
+    market: "US stocks",
+  });
+};
+$("pause").onclick = () => {
+  paused = !paused;
+  schedule();
+};
 $("settings-form").onsubmit = async (e) => {
   e.preventDefault();
   const symbols = [...$("symbol-editors").children].map((row) => ({
@@ -273,7 +342,7 @@ $("settings-form").onsubmit = async (e) => {
     $("save-status").textContent = "Add an API key to enable market data.";
     return;
   }
-  settings = cleanSettings({
+  const nextSettings = cleanSettings({
     mode: $("mode").value,
     symbols,
     interval: $("interval").value,
@@ -282,8 +351,8 @@ $("settings-form").onsubmit = async (e) => {
     compact: $("compact").checked,
   });
   try {
-    await write({ settings, apiKey });
-    if (extension) await chrome.runtime.sendMessage({ type: "clear-cache" });
+    await write({ settings: nextSettings, apiKey });
+    settings = nextSettings;
     apply();
     view(false);
   } catch {
@@ -351,10 +420,12 @@ $("close").onclick = () => {
   else window.close();
 };
 document.addEventListener("visibilitychange", schedule);
+window.addEventListener("online", schedule);
+window.addEventListener("offline", schedule);
 if (extension) {
   chrome.storage.onChanged.addListener(async (changes, area) => {
-    if (area === "local" && changes.settings) {
-      settings = cleanSettings(changes.settings.newValue);
+    if (area === "local" && (changes.settings || changes.apiKey)) {
+      if (changes.settings) settings = cleanSettings(changes.settings.newValue);
       generation++;
       apply();
       if (!settingsOpen) schedule();

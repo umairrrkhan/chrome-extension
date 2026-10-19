@@ -2,6 +2,7 @@
   const id = "smallwindow-trade-host";
   const existing = document.getElementById(id);
   if (existing) {
+    existing.dispatchEvent(new Event("swt-remove"));
     existing.remove();
     return;
   }
@@ -26,7 +27,11 @@
     "position:absolute;top:0;left:0;right:0;height:22px;border:0;border-radius:18px 18px 0 0;background:#202b2a;color:#9bafaa;font:10px system-ui;cursor:grab;touch-action:none;";
   shadow.append(frame, handle);
   document.documentElement.append(host);
-  let x, y, left, top;
+  let x,
+    y,
+    left,
+    top,
+    requestedHeight = 650;
   const move = (l, t) => {
     host.style.setProperty(
       "left",
@@ -35,10 +40,11 @@
     );
     host.style.setProperty(
       "top",
-      `${Math.max(8, Math.min(t, innerHeight - 50))}px`,
+      `${Math.max(8, Math.min(t, innerHeight - Math.min(requestedHeight, innerHeight - 16) - 8))}px`,
       "important",
     );
     host.style.setProperty("right", "auto", "important");
+    frame.style.maxHeight = `${Math.max(86, innerHeight - 16)}px`;
   };
   handle.onpointerdown = (e) => {
     const r = host.getBoundingClientRect();
@@ -80,9 +86,19 @@
       e.origin !== chrome.runtime.getURL("").replace(/\/$/, "")
     )
       return;
-    if (e.data?.type === "swt-close") host.remove();
-    if (e.data?.type === "swt-size")
-      frame.style.height = `${Math.max(86, Math.min(780, Number(e.data.height) || 650))}px`;
+    if (e.data?.type === "swt-close") destroy();
+    if (e.data?.type === "swt-size" && Number.isFinite(e.data.height)) {
+      requestedHeight = Math.max(86, Math.min(780, e.data.height));
+      frame.style.height = `${requestedHeight}px`;
+      resize();
+    }
   };
+  function destroy() {
+    window.removeEventListener("resize", resize);
+    window.removeEventListener("message", listener);
+    host.remove();
+  }
+  host.addEventListener("swt-remove", destroy, { once: true });
   window.addEventListener("message", listener);
+  resize();
 })();

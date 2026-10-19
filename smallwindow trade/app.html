@@ -61,8 +61,12 @@
         </nav>
         <section id="watch-view">
           <div class="section-head">
-            <span id="range-label">48 daily bars</span
-            ><button id="refresh" class="text-button">↻ Refresh</button>
+            <span id="range-label">48 daily bars</span>
+            <div class="watch-actions">
+              <button id="pause" class="text-button" aria-pressed="false">
+                Pause</button
+              ><button id="refresh" class="text-button">↻ Refresh</button>
+            </div>
           </div>
           <div id="cards" aria-live="polite"></div>
           <div id="notice" class="notice"></div>

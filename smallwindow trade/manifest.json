@@ -1,13 +1,16 @@
 {
   "manifest_version": 3,
   "name": "Smallwindow Trade",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Keep up to three market charts beside whatever you are browsing.",
   "minimum_chrome_version": "120",
   "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": ["https://api.twelvedata.com/*"],
   "optional_host_permissions": ["http://*/*", "https://*/*"],
-  "background": { "service_worker": "background.js", "type": "module" },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "action": {
     "default_popup": "app.html",
     "default_title": "Smallwindow Trade"

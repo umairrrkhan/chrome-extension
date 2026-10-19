@@ -27,22 +27,37 @@ async function syncAuto() {
 chrome.permissions.onAdded.addListener(syncAuto);
 chrome.permissions.onRemoved.addListener(syncAuto);
 chrome.runtime.onMessage.addListener((msg, sender, reply) => {
+  const appURL = chrome.runtime.getURL("app.html");
   if (
     sender.id !== chrome.runtime.id ||
-    !sender.url?.startsWith(chrome.runtime.getURL("app.html"))
+    sender.url?.split(/[?#]/)[0] !== appURL
   )
     return;
-  if (msg.type === "quote") {
+  if (msg?.type === "quote") {
     getQuote(msg.symbol)
       .then((data) => reply({ data }))
       .catch((e) => reply({ error: e.message }));
     return true;
   }
-  if (msg.type === "clear-cache") {
-    chrome.storage.session.clear().then(() => reply({ ok: true }));
-    return true;
-  }
 });
+async function cacheScope(key) {
+  // Isolate prices and pending requests when the user changes provider accounts.
+  // Store only a hash, never the API key, in the temporary price cache.
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(key),
+  );
+  return Array.from(new Uint8Array(digest), (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("");
+}
+function cachedResult(saved) {
+  if (saved.error) {
+    if (saved.points) return { ...saved, stale: true };
+    throw new Error(saved.error);
+  }
+  return saved;
+}
 async function getQuote(symbol) {
   const raw = await chrome.storage.local.get(["settings", "apiKey"]);
   const settings = cleanSettings(raw.settings);
@@ -50,9 +65,14 @@ async function getQuote(symbol) {
   if (!settings.symbols.some((x) => x.symbol === symbol))
     throw new Error("Symbol is not in your watchlist.");
   if (!raw.apiKey) throw new Error("Add your Twelve Data API key in settings.");
-  const cacheKey = `quote:${symbol}:${settings.interval}`;
+  const cacheKey = `quote:${await cacheScope(raw.apiKey)}:${symbol}:${settings.interval}`;
   const saved = (await chrome.storage.session.get(cacheKey))[cacheKey];
-  if (saved && Date.now() - saved.fetchedAt < settings.refresh * 1000)
+  if (saved?.retryAt > Date.now()) return cachedResult(saved);
+  if (
+    saved &&
+    !saved.error &&
+    Date.now() - saved.fetchedAt < settings.refresh * 1000
+  )
     return saved;
   if (pending.has(cacheKey)) return pending.get(cacheKey);
   const task = (async () => {
@@ -70,7 +90,9 @@ async function getQuote(symbol) {
       });
       if (!response.ok)
         throw new Error(
-          `Provider unavailable (${response.status}). Try again later.`,
+          response.status === 429
+            ? "Provider request limit reached. Retrying after a short pause."
+            : `Provider unavailable (${response.status}). Try again later.`,
         );
       const data = {
         ...parseSeries(await response.json(), symbol),
@@ -79,19 +101,20 @@ async function getQuote(symbol) {
       await chrome.storage.session.set({ [cacheKey]: data });
       return data;
     } catch (e) {
-      if (saved)
-        return {
-          ...saved,
-          stale: true,
-          error: e.name === "TimeoutError" ? "Provider timed out." : e.message,
-        };
-      throw new Error(
+      const error =
         e.name === "TimeoutError"
           ? "Provider timed out. Try again."
           : e.message === "Failed to fetch"
             ? "Unable to reach the provider. Check your connection."
-            : e.message,
-      );
+            : e.message;
+      // Cache failures too: reopening a view must not hammer an unavailable or rate-limited provider.
+      const failed = {
+        ...(saved?.points ? saved : {}),
+        error,
+        retryAt: Date.now() + Math.max(60, settings.refresh) * 1000,
+      };
+      await chrome.storage.session.set({ [cacheKey]: failed });
+      return cachedResult(failed);
     }
   })().finally(() => pending.delete(cacheKey));
   pending.set(cacheKey, task);

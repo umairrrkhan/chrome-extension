@@ -455,3 +455,21 @@ body.overlay footer {
 body.overlay .card small {
   font-size: 8px;
 }
+
+.watch-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#pause[aria-pressed="true"] {
+  color: var(--red);
+}
+#mini-ticker {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#expand {
+  flex-shrink: 0;
+}
