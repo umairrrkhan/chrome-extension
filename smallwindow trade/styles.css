@@ -1,0 +1,457 @@
+:root {
+  color-scheme: dark;
+  --bg: #101918;
+  --card: #172220;
+  --line: #2b3834;
+  --text: #edf4ec;
+  --muted: #93a69e;
+  --green: #b8e88a;
+  --red: #ff9d98;
+  --input: #1d2a26;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  width: 366px;
+  max-width: 100vw;
+  background: var(--bg);
+  color: var(--text);
+  font:
+    12px/1.5 -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+body.light {
+  color-scheme: light;
+  --bg: #f4f6f0;
+  --card: #fff;
+  --line: #d7dfd3;
+  --text: #18271e;
+  --muted: #596b60;
+  --green: #3f6c1d;
+  --red: #b43d3c;
+  --input: #eaf0e6;
+}
+body.overlay {
+  padding-top: 22px;
+}
+#app {
+  padding: 20px;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+button {
+  color: inherit;
+}
+header,
+.brand,
+.tools,
+.title-row,
+.section-head,
+footer,
+.card-top,
+.quote-row,
+.two-col,
+.editor-line,
+#collapsed {
+  display: flex;
+  align-items: center;
+}
+.brand {
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: -0.5px;
+}
+.logo {
+  display: grid;
+  place-items: center;
+  color: #142316;
+  background: #b8e88a;
+  border-radius: 10px;
+  width: 33px;
+  height: 33px;
+  font-size: 26px;
+  font-weight: 500;
+}
+.subbrand {
+  display: block;
+  font-size: 7px;
+  letter-spacing: 1.3px;
+  color: var(--muted);
+  font-weight: 500;
+  margin-top: 1px;
+}
+header {
+  justify-content: space-between;
+}
+.icon {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  width: 25px;
+  height: 29px;
+  font-size: 20px;
+}
+.intro {
+  padding: 26px 0 17px;
+}
+.eyebrow {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.title-row {
+  justify-content: space-between;
+}
+h1 {
+  font-weight: 550;
+  font-size: 27px;
+  letter-spacing: -1.1px;
+  line-height: 1.3;
+  margin: 0;
+}
+h1 span {
+  color: var(--green);
+}
+p {
+  color: var(--muted);
+  margin: 6px 0 0;
+  font-size: 11px;
+}
+.badge {
+  color: var(--green);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 3px 7px;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+nav {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+  gap: 24px;
+}
+nav button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  padding: 10px 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+nav button.active {
+  color: var(--text);
+  border-bottom-color: var(--green);
+}
+nav span {
+  font-size: 9px;
+  color: var(--muted);
+  margin-left: 8px;
+}
+.section-head {
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 10px;
+  margin: 14px 0 10px;
+}
+.section-head strong {
+  color: var(--text);
+  font-weight: 500;
+}
+.text-button {
+  background: transparent;
+  border: 0;
+  color: var(--green);
+  font-size: 10px;
+  padding: 4px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 13px 14px;
+  margin-bottom: 9px;
+}
+.card-top {
+  justify-content: space-between;
+}
+.symbol {
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.4px;
+}
+.market {
+  color: var(--muted);
+  font-size: 9px;
+}
+.quote-row {
+  justify-content: space-between;
+  margin-top: 7px;
+}
+.price {
+  font-size: 22px;
+  letter-spacing: -0.6px;
+  font-variant-numeric: tabular-nums;
+}
+.currency {
+  font-size: 9px;
+  color: var(--muted);
+  margin-left: 5px;
+}
+.change {
+  font-size: 10px;
+  color: var(--green);
+  background: color-mix(in srgb, var(--green) 9%, transparent);
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+.negative {
+  color: var(--red);
+}
+svg.chart {
+  display: block;
+  width: 100%;
+  height: 55px;
+  margin: 7px 0 0;
+}
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 8px;
+  gap: 8px;
+}
+.card-bottom span:last-child {
+  text-align: right;
+}
+.error {
+  color: var(--red);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.notice {
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 13px 0;
+}
+.primary {
+  width: 100%;
+  border: 0;
+  background: #b8e88a;
+  color: #142316;
+  padding: 11px;
+  border-radius: 7px;
+  font-weight: 650;
+  font-size: 11px;
+}
+.primary:hover {
+  background: #cdf5a6;
+}
+.primary:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.hint {
+  text-align: center;
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+footer {
+  gap: 6px;
+  color: var(--muted);
+  font-size: 8px;
+  border-top: 1px solid var(--line);
+  margin-top: 17px;
+  padding-top: 12px;
+}
+.status-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--green);
+  border-radius: 50%;
+}
+.footer-end {
+  margin-left: auto;
+}
+label {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  margin: 12px 0 7px;
+}
+input,
+select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--input);
+  color: var(--text);
+  padding: 9px;
+  margin-top: 5px;
+  font-size: 11px;
+}
+small {
+  display: block;
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+a {
+  color: var(--green);
+}
+.divider {
+  border-top: 1px solid var(--line);
+  margin: 17px 0 10px;
+}
+.two-col {
+  gap: 12px;
+}
+.two-col > label {
+  flex: 1;
+  min-width: 0;
+}
+.editor {
+  margin-bottom: 9px;
+}
+.editor-line {
+  gap: 7px;
+}
+.editor select {
+  width: 108px;
+}
+.editor input {
+  flex: 1;
+  width: 90px;
+}
+.editor button {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 18px;
+  padding: 4px;
+}
+.secondary {
+  background: transparent;
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  padding: 8px;
+  width: 100%;
+  margin: 2px 0 10px;
+  font-size: 10px;
+  color: var(--green);
+}
+.check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text);
+  font-size: 10px;
+}
+.check input {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: #92bf69;
+}
+#save-status {
+  font-size: 10px;
+  margin: 7px 0;
+  color: var(--green);
+}
+#settings-view {
+  padding-bottom: 4px;
+}
+#collapsed {
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 11px;
+}
+.compact svg.chart {
+  display: none;
+}
+.compact .card {
+  padding: 10px 12px;
+}
+.compact .price {
+  font-size: 18px;
+}
+[hidden] {
+  display: none !important;
+}
+body.mini .intro {
+  display: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  button {
+    transition: background 0.15s;
+  }
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Keep all three charts visible in the floating window. */
+body.overlay .intro {
+  display: none;
+}
+body.overlay header {
+  margin-bottom: 12px;
+}
+body.overlay .card {
+  padding: 8px 11px;
+}
+body.overlay .quote-row {
+  margin-top: 2px;
+}
+body.overlay .price {
+  font-size: 19px;
+}
+body.overlay svg.chart {
+  height: 34px;
+  margin-top: 3px;
+}
+body.overlay .section-head {
+  margin: 9px 0;
+}
+body.overlay .notice {
+  margin: 8px 0;
+  font-size: 8px;
+}
+body.overlay .hint {
+  font-size: 8px;
+}
+body.overlay footer {
+  margin-top: 10px;
+}
+body.overlay .card small {
+  font-size: 8px;
+}

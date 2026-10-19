@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Smallwindow Trade",
+  "version": "1.0.0",
+  "description": "Keep up to three market charts beside whatever you are browsing.",
+  "minimum_chrome_version": "120",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["https://api.twelvedata.com/*"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": {
+    "default_popup": "app.html",
+    "default_title": "Smallwindow Trade"
+  },
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["app.html", "app.js", "styles.css", "core.js"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; frame-ancestors http: https: 'self'"
+  }
+}

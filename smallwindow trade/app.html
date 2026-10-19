@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Smallwindow Trade</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main id="app">
+      <header>
+        <div class="brand">
+          <span class="logo"
+            ><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+              <path
+                d="M4 17l6-6 4 3 6-9M14 5h6v6"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              /></svg
+          ></span>
+          <div>
+            smallwindow<span class="subbrand"
+              >TRADE · YOUR MARKETS, ANYWHERE</span
+            >
+          </div>
+        </div>
+        <div class="tools">
+          <button
+            id="collapse"
+            class="icon"
+            title="Collapse window"
+            aria-label="Collapse window"
+          >
+            −</button
+          ><button
+            id="close"
+            class="icon"
+            title="Close window"
+            aria-label="Close window"
+          >
+            ×
+          </button>
+        </div>
+      </header>
+      <div id="expanded">
+        <section class="intro">
+          <div class="eyebrow">A LITTLE WINDOW. A BIG PICTURE.</div>
+          <div class="title-row">
+            <h1>Market watch<span>.</span></h1>
+            <span id="mode-badge" class="badge">DEMO</span>
+          </div>
+          <p>Your markets. Along for the scroll.</p>
+        </section>
+        <nav aria-label="Views">
+          <button id="watch-tab" class="active">
+            Watchlist <span id="count">3</span></button
+          ><button id="settings-tab">Settings <span>⚙</span></button>
+        </nav>
+        <section id="watch-view">
+          <div class="section-head">
+            <span id="range-label">48 daily bars</span
+            ><button id="refresh" class="text-button">↻ Refresh</button>
+          </div>
+          <div id="cards" aria-live="polite"></div>
+          <div id="notice" class="notice"></div>
+          <button id="float" class="primary">Float on this page</button>
+          <div class="hint" id="float-hint">
+            Keep this window beside whatever you’re browsing.
+          </div>
+        </section>
+        <section id="settings-view" hidden>
+          <form id="settings-form">
+            <label
+              >Data source<select id="mode">
+                <option value="demo">Demo · sample prices</option>
+                <option value="live">Twelve Data · market data</option>
+              </select></label
+            >
+            <div id="key-field">
+              <label
+                >API key<input
+                  id="api-key"
+                  type="password"
+                  autocomplete="off"
+                  placeholder="Your Twelve Data key" /></label
+              ><small
+                >Stored only in this browser. Sent only to Twelve Data.
+                <a
+                  href="https://twelvedata.com/apikey"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Get a key</a
+                ></small
+              >
+            </div>
+            <div class="divider"></div>
+            <div class="section-head">
+              <strong>Your watchlist</strong><span>1–3 symbols</span>
+            </div>
+            <div id="symbol-editors"></div>
+            <button type="button" id="add-symbol" class="secondary">
+              + Add symbol</button
+            ><small
+              >Use provider symbols. Availability and delays depend on your plan
+              and exchange.</small
+            >
+            <div class="two-col">
+              <label
+                >Chart interval<select id="interval">
+                  <option value="1min">1 minute</option>
+                  <option value="5min">5 minutes</option>
+                  <option value="1h">1 hour</option>
+                  <option value="1day">1 day</option>
+                </select></label
+              ><label
+                >Refresh every<select id="refresh-rate">
+                  <option value="60">1 minute</option>
+                  <option value="120">2 minutes</option>
+                  <option value="300">5 minutes</option>
+                </select></label
+              >
+            </div>
+            <div class="two-col">
+              <label
+                >Appearance<select id="theme">
+                  <option value="dark">Midnight</option>
+                  <option value="light">Daylight</option>
+                </select></label
+              ><label class="check"
+                ><input type="checkbox" id="compact" /> Compact cards</label
+              >
+            </div>
+            <button class="primary" type="submit">Save preferences</button>
+            <div id="save-status" role="status"></div>
+          </form>
+          <div class="divider"></div>
+          <label class="check"
+            ><input type="checkbox" id="auto-show" /> Show automatically on
+            websites</label
+          ><small
+            >Optional: Chrome will ask for website access. Otherwise, use “Float
+            on this page” when needed. Restricted Chrome pages cannot show
+            overlays.</small
+          >
+        </section>
+        <footer>
+          <span class="status-dot"></span
+          ><span id="footer-status">Demo workspace</span
+          ><span class="footer-end">Stay in the loop</span>
+        </footer>
+      </div>
+      <div id="collapsed" hidden>
+        <span id="mini-ticker">Markets at a glance</span
+        ><button id="expand" class="text-button">Expand</button>
+      </div>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
