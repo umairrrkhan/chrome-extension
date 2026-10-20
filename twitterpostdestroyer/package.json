@@ -1,6 +1,6 @@
 {
   "name": "twitterpostdestroyer",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "private": true,
   "description": "Development checks only; the extension has no runtime dependencies.",
   "scripts": {
