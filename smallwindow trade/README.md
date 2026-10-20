@@ -92,3 +92,7 @@ Want to support continued development? Use **Sponsor me** in the popup or floati
 ### 1.0.3
 
 - Renamed the footer link to **Sponsor me** and kept the popup footer visible at the bottom while scrolling. Clicking it opens the payment page; visitors choose whether to contribute there.
+
+### 1.0.4
+
+- Added a minimal dark-green and lime floating-window/chart icon, including 16, 32, 48, and 128 px PNGs and explicit toolbar icons. The original artwork is kept in `icons/source.png`; only the small production sizes ship in the install ZIP.
